@@ -14,7 +14,7 @@ final class DownLoadAvatarUserController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entitymanager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $user_avatar = $data['user_avatar'];
+        $user_avatar = htmlspecialchars(trim($data['user_avatar']));
         $user_email = $data['user_email'];
         $client = $entitymanager->getRepository(Client::class)->findOneBy(['client_email' => $user_email]);
         $client->setClientAvatar($user_avatar);

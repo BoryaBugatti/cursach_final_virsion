@@ -47,6 +47,7 @@ export default {
         this.formData.address = '';
         if (response.data['status'] == 'success'){
           alert('Вы успешно зарегистрировались');
+          window.location.href='/Lk';
         }
       } catch (error) {
         console.error('Ошибка при регистрации:', error);

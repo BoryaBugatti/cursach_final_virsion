@@ -28,6 +28,9 @@ class Client
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $client_avatar = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $client_role = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class Client
     public function setClientAvatar(?string $client_avatar): static
     {
         $this->client_avatar = $client_avatar;
+
+        return $this;
+    }
+
+    public function getClientRole(): ?string
+    {
+        return $this->client_role;
+    }
+
+    public function setClientRole(?string $client_role): static
+    {
+        $this->client_role = $client_role;
 
         return $this;
     }

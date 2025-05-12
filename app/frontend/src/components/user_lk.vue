@@ -1,26 +1,43 @@
 <template>
-  <div class="lk-container">
-    <h2 class="auth-title">Личный кабинет</h2>
-    <div class="user-info">
-      <div class="avatar-container">
-        <img :src="user_avatar" alt="Аватар пользователя" class="user-avatar" />
+  <div class="lk-cont">
+    <div class="lk-container">
+      <h2 class="auth-title">Личный кабинет</h2>
+      <div class="user-info">
+        <div class="avatar-container">
+          <img :src="user_avatar" alt="Аватар пользователя" class="user-avatar" />
+        </div>
+        <div class="user-details">
+          <p class="welcome-message">Добро пожаловать, <strong>{{ user_name }}</strong>!</p>
+          <p class="user-email">Ваша почта: <strong>{{ user_email }}</strong></p>
+          <p class="user_role">Ваша роль: <strong>{{ user_role }}</strong></p>
+        </div>
       </div>
-      <div class="user-details">
-        <p class="welcome-message">Добро пожаловать, <strong>{{ user_name }}</strong>!</p>
-        <p class="user-email">Ваша почта: <strong>{{ user_email }}</strong></p>
-        <p class="user_role">Ваша роль: <strong>{{ user_role }}</strong></p>
+      <div class="buttons-container">
+        <form @submit.prevent="download_avatar">
+          <button type="submit" class="submit-button">Изменить аватар</button>
+        </form>
+        <form @submit.prevent="logout">
+          <button type="submit" class="submit-button logout-button">Выйти</button>
+        </form>
+        <form @submit.prevent = "getAllOrders" v-if="user_role == 'Админ'">
+          <button type="submit" class="submit-button">Получить данные о всех заказах</button>
+        </form>
       </div>
-    </div>
-    <div class="buttons-container">
-      <form @submit.prevent="download_avatar">
-        <button type="submit" class="submit-button">Загрузить аватар</button>
-      </form>
-      <form @submit.prevent="logout">
-        <button type="submit" class="submit-button logout-button">Выйти</button>
-      </form>
-      <form>
-        <button type="submit" class="submit-button">Получить данные о всех заказах</button>
-      </form>
+      <div class="orders-container">
+        <div class="order-card" v-for="order in orders" :key="order.id">
+          <h3>Заказ #{{ order.id }}</h3>
+          <p>Имя клиента: {{ order.orderClientName }}</p>
+          <p>Адрес заказа: {{ order.orderAddress }}</p>
+          <p>Тип отходов: {{ order.orderWasteType }}</p>
+          <p>Дата: {{ formatDate(order.orderDate) }}</p>
+          <p>Время: {{ formatTime(order.orderTime) }}</p>
+          <p>Объем отходов(кг): {{ order.orderWasteVolume }}</p>
+          <div class="order-actions">
+            <button @click="editOrder(order.id)" class="edit-button">Редактировать</button>
+            <button @click="deleteOrder(order.id)" class="delete-button">Удалить</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +50,8 @@ export default {
       user_email: '',
       user_name: '',
       user_avatar: '',
-      user_role: '', 
+      user_role: '',
+      orders: [], 
     };
   },
   created() {
@@ -67,18 +85,36 @@ export default {
       const response = await axios.post('http://localhost:8090/api/downloadavatar', {user_avatar: this.user_avatar, user_email: this.user_email});
       if (response.data['status'] == 'success')
         alert('Ваш аватар успешно обновлен');
-    }
+    },
+    async getAllOrders(){
+      const response = await axios.get('http://localhost:8090/api/get_all_orders');
+      this.orders = response.data;
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ru-RU', options);
+    },
+    formatTime(timeString) {
+      const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' };
+      const time = new Date(timeString);
+      return time.toLocaleTimeString('ru-RU', options);
+    },
   },
 };
 </script>
 
 <style scoped>
+.lk-cont{
+  margin-top: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .lk-container {
   display: flex;
   flex-direction: column;
-  width: 600px;
-  margin-left: 32%;
-  margin-top: 3%;
+  width: 700px;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -149,5 +185,10 @@ export default {
 
 .logout-button:hover {
   background-color: #c82333;
+}
+.orders-container{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 </style>

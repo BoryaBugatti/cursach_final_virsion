@@ -18,7 +18,7 @@ final class AthorizationController extends AbstractController
         $password = $data['password'];
         $client = $entitymanager->getRepository(Client::class)->findOneBy(['client_email'=>$email]);
         if ($client && password_verify($password, $client->getClientPassword())){
-            return $this->json(['status' => 'success', 'user_name'=>$client->getClientName(), 'user_avatar' => $client->getClientAvatar()]);
+            return $this->json(['status' => 'success', 'user_name'=>$client->getClientName(), 'user_avatar' => $client->getClientAvatar(), 'user_role'=>$client->getClientRole()]);
         }
         return $this->json(['status' => 'error']);
     }

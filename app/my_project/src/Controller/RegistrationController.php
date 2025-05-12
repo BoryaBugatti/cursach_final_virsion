@@ -28,6 +28,8 @@ final class RegistrationController extends AbstractController
         $client->setClientEmail($email);
         $client->setClientPassword(password_hash($password, PASSWORD_DEFAULT));
         $client->setClientAddress($address);
+        $client->setClientRole('Клиент');
+        $client->setClientAvatar('https://png.pngtree.com/element_our/png_detail/20181206/users-vector-icon-png_260862.jpg');
         $entitymanager->persist($client);
         $entitymanager->flush();
         return $this->json(['status' => 'success']);

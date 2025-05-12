@@ -57,6 +57,7 @@ export default {
           sessionStorage.setItem('client_password', this.formData.password);
           sessionStorage.setItem('user_name', response.data['user_name']);
           sessionStorage.setItem('user_avatar', response.data['user_avatar']);
+          sessionStorage.setItem('user_role', response.data['user_role']);
           alert('Вы успешно авторизировались');
         } else {
           alert('Неверный логин или пароль');
@@ -70,7 +71,7 @@ export default {
 </script>
 
 <style scoped>
-.auth-container, .lk-container {
+.auth-container {
   max-width: 400px; 
   margin: 5% auto; 
   padding: 20px; 
