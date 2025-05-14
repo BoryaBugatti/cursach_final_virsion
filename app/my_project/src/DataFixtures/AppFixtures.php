@@ -10,9 +10,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $connection = $manager->getConnection();
-        $connection->executeStatement('TRUNCATE TABLE product RESTART IDENTITY CASCADE');
-        
         $faker = Factory::create();
         for ($i = 0; $i < 10; $i++){
             $order = new Orders();

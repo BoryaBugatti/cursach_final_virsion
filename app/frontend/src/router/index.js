@@ -3,6 +3,7 @@ import RegForm from '../components/RegisterForm.vue';
 import mainwindow from "../components/mainwindow.vue";
 import Athoriz from "../components/Athorization.vue";
 import make_order from "../components/make_order.vue";
+import user_lk from "../components/user_lk.vue";
 
 const routes = [
   {

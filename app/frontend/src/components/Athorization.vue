@@ -71,6 +71,7 @@ export default {
 </script>
 
 <style scoped>
+
 .auth-container {
   max-width: 400px; 
   margin: 5% auto; 
