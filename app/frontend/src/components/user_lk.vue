@@ -250,7 +250,7 @@ export default {
     },
     async assignRoute() {
       try {
-        const routeResponse = await axios.post('http://localhost:8090/api/routes/create', {
+        const routeResponse = await axios.post('http://localhost:8090/api/create_route', {
           route_schedule: this.routeData.route_schedule,
           transport_id: this.routeData.transport_id,
           driver_session_id: this.routeData.driver_id
@@ -258,9 +258,7 @@ export default {
         
         const routeId = routeResponse.data.id;
         
-        await axios.patch(`http://localhost:8090/api/orders/${this.routeData.order_id}`, {
-          route_id: routeId
-        });
+        await axios.patch("http://localhost:8090/api/update_route_id_in_order", {order_id: this.routeData.order_id, route_id: routeId});
         
         await axios.post('http://localhost:8090/api/execution-events', {
           order_id: this.routeData.order_id,
